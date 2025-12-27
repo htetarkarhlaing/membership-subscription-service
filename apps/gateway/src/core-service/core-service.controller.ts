@@ -49,8 +49,6 @@ export class CoreServiceController implements OnModuleInit {
         response$.pipe(timeout(this.pingTimeoutMs)),
       );
 
-      console.log('Core service ping response:', result);
-
       return {
         data: result,
         message: 'Core service ping successful',

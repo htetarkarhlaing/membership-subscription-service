@@ -1,5 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RmqContext, RmqOptions, MicroserviceOptions } from '@nestjs/microservices';
+import {
+  RmqContext,
+  RmqOptions,
+  MicroserviceOptions,
+} from '@nestjs/microservices';
 import { buildRmqClientOptions, buildRmqServerOptions } from './rmq.config';
 
 @Injectable()
