@@ -1,0 +1,16 @@
+{
+  "login_successful": "管理员登录成功",
+  "register_successful": "管理员创建成功",
+  "invalid_email_or_password": "管理员邮箱或密码无效",
+  "account_suspended": "管理员账号已被暂停",
+  "account_inactive": "管理员账号未激活",
+  "access_denied": "管理员访问被拒绝",
+  "user_not_found": "未找到管理员用户",
+  "authentication_failed": "管理员认证失败",
+  "password_strength_invalid": "管理员密码不符合安全要求",
+  "current_password_incorrect": "当前管理员密码不正确",
+  "password_changed_successfully": "管理员密码修改成功",
+  "email_already_exists": "该邮箱已存在管理员账号",
+  "account_updated_successfully": "管理员账号更新成功",
+  "user_info_retrieved": "管理员信息获取成功"
+}

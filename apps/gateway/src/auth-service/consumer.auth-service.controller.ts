@@ -30,9 +30,9 @@ import { ConsumerLocalAuthGuard } from './guards/consumer-local-auth.guard';
 import { User } from 'generated/prisma/client';
 import { ConsumerJwtAuthGuard } from './guards/consumer-jwt-auth.guard';
 
-@ApiTags('Auth')
-@Controller('auth')
-export class AuthServiceController {
+@ApiTags('Auth - Consumer')
+@Controller('auth-consumer')
+export class ConsumerAuthServiceController {
   constructor(
     @Inject('AUTH_SERVICE')
     private readonly authClient: ClientProxy,
@@ -84,7 +84,7 @@ export class AuthServiceController {
     }
   }
 
-  @Get('users/whoami')
+  @Get('whoami')
   @ApiBearerAuth()
   @UseGuards(ConsumerJwtAuthGuard)
   @ApiOperation({ summary: 'Get user info' })
@@ -100,7 +100,7 @@ export class AuthServiceController {
     }
   }
 
-  @Patch('users/updated-account')
+  @Patch('updated-account')
   @ApiBearerAuth()
   @UseGuards(ConsumerJwtAuthGuard)
   @ApiOperation({ summary: 'Update user account' })
@@ -119,7 +119,7 @@ export class AuthServiceController {
     }
   }
 
-  @Patch('users/change-password')
+  @Patch('change-password')
   @ApiBearerAuth()
   @UseGuards(ConsumerJwtAuthGuard)
   @ApiOperation({ summary: 'Change user password' })
