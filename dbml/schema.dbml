@@ -1,0 +1,102 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  email String [unique, not null]
+  password String [not null]
+  firstName String [not null]
+  lastName String [not null]
+  UserStatus UserStatus [not null, default: 'ACTIVE']
+  UserRole UserRole [not null, default: 'CONSUMER']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  subscriptions UserSubscription [not null]
+  transactions Transaction [not null]
+}
+
+Table SubscriptionPlan {
+  id String [pk]
+  name String [not null]
+  slug String [unique, not null]
+  description String
+  price Decimal [not null]
+  currency String [not null, default: 'USD']
+  billingPeriod BillingPeriod [not null, default: 'MONTHLY']
+  planDuration Int [not null, default: 1]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  subscriptions UserSubscription [not null]
+}
+
+Table UserSubscription {
+  id String [pk]
+  userId String [not null]
+  planId String [not null]
+  status SubscriptionStatus [not null, default: 'ACTIVE']
+  subscriptionStartDate DateTime [default: `now()`, not null]
+  subscriptionEndDate DateTime [not null]
+  autoRenew Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  plan SubscriptionPlan [not null]
+  transactions Transaction [not null]
+
+  indexes {
+    (userId, planId, status) [unique]
+  }
+}
+
+Table Transaction {
+  id String [pk]
+  userId String [not null]
+  subscriptionId String [not null]
+  amount Decimal [not null]
+  currency String [not null, default: 'USD']
+  status PaymentStatus [not null, default: 'PENDING']
+  processedAt DateTime
+  failureReason String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  subscription UserSubscription [not null]
+}
+
+Enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+Enum UserRole {
+  ADMIN
+  CONSUMER
+}
+
+Enum BillingPeriod {
+  MONTHLY
+  YEARLY
+}
+
+Enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  EXPIRED
+}
+
+Enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+Ref: UserSubscription.userId > User.id [delete: Cascade]
+
+Ref: UserSubscription.planId > SubscriptionPlan.id
+
+Ref: Transaction.userId > User.id [delete: Cascade]
+
+Ref: Transaction.subscriptionId > UserSubscription.id
