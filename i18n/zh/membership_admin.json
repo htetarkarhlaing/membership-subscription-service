@@ -1,0 +1,11 @@
+{
+  "plan_created": "会员计划已创建",
+  "plan_updated": "会员计划已更新",
+  "plan_deleted": "会员计划已删除",
+  "plans_retrieved": "已获取会员计划列表",
+  "plan_not_found": "未找到会员计划",
+  "plan_retrieved": "已获取会员计划",
+  "active_subscription_not_found": "未找到用户的有效订阅",
+  "subscription_canceled": "管理员已取消订阅",
+  "report_generated": "会员报告已生成"
+}

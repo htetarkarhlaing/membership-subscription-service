@@ -1,0 +1,9 @@
+{
+  "not_found": "Wallet not found",
+  "summary_retrieved": "Wallet summary retrieved",
+  "payment_methods_retrieved": "Available payment methods retrieved",
+  "payment_method_not_found": "Payment method is not available",
+  "topup_requested": "Top-up request submitted",
+  "topups_retrieved": "Top-up requests retrieved",
+  "insufficient_balance": "Insufficient wallet balance for this operation"
+}

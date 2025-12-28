@@ -1,7 +1,17 @@
 import { Module } from '@nestjs/common';
 import { CoreServiceController } from './core-service.controller';
 import { ClientsModule } from '@nestjs/microservices';
-import { RmqModule, RmqService } from '@app/common';
+import {
+  RmqModule,
+  RmqService,
+  ErrorHandlerService,
+  RpcClientService,
+} from '@app/common';
+import { ConsumerMembershipController } from './consumer-membership.controller';
+import { AdminMembershipController } from './admin-membership.controller';
+import { ConsumerWalletController } from './consumer-wallet.controller';
+import { AdminWalletController } from './admin-wallet.controller';
+import { RedisCacheService } from '../shared/redis-cache.service';
 
 @Module({
   imports: [
@@ -18,7 +28,13 @@ import { RmqModule, RmqService } from '@app/common';
       },
     ]),
   ],
-  controllers: [CoreServiceController],
-  providers: [],
+  controllers: [
+    CoreServiceController,
+    ConsumerMembershipController,
+    AdminMembershipController,
+    ConsumerWalletController,
+    AdminWalletController,
+  ],
+  providers: [ErrorHandlerService, RpcClientService, RedisCacheService],
 })
 export class CoreServiceModule {}

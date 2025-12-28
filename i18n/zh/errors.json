@@ -34,5 +34,6 @@
   "something_went_wrong": "出现问题",
   "invalid_request": "无效请求",
   "invalid_time_request": "无效的时间请求",
-  "permission_denied": "没有权限"
+  "permission_denied": "没有权限",
+  "rpc_timeout": "RPC 请求超时"
 }

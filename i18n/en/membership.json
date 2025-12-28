@@ -1,0 +1,11 @@
+{
+  "plans_retrieved": "Active membership plans retrieved",
+  "plan_not_found_or_inactive": "Selected plan is not available",
+  "active_subscription_exists": "You already have an active subscription",
+  "already_subscribed": "You are already subscribed to this plan",
+  "subscribed_successfully": "Subscription created successfully",
+  "active_subscription_not_found": "No active subscription found",
+  "subscription_canceled": "Subscription canceled successfully",
+  "plan_changed": "Subscription plan updated successfully",
+  "subscription_retrieved": "Active subscription retrieved"
+}

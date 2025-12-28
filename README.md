@@ -1,98 +1,147 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Membership Subscription Service
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+NestJS microservices for authentication, wallets, and memberships. The system exposes an HTTP gateway backed by RabbitMQ RPC to Auth and Core services, Prisma/PostgreSQL for persistence, and Redis caching for public catalog endpoints.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Architecture
 
-## Project setup
-
-```bash
-$ npm install
+```
+Gateway (HTTP + Swagger)
+  ├─ Auth service (RMQ RPC)
+  ├─ Core service (RMQ RPC)
+  └─ Shared libs (DTOs, constants, Prisma, i18n, guards)
 ```
 
-## Compile and run the project
+* **Gateway**: HTTP surface, Swagger at `/docs`, caches public catalog responses.
+* **Auth**: JWT issuance/verification for consumer/admin roles.
+* **Core**: Membership plans, subscriptions, wallet, and top-ups.
 
-```bash
-# development
-$ npm run start
+---
 
-# watch mode
-$ npm run start:dev
+## Prerequisites
 
-# production mode
-$ npm run start:prod
+* Node.js 18+
+* npm
+* PostgreSQL
+* RabbitMQ
+* Redis (for cache; optional but recommended in local dev)
+
+---
+
+## Environment
+
+Copy `.env.example` to `.env` and set values:
+
+```env
+PORT=8080
+
+DATABASE_URL=postgresql://user:password@host:5432/database
+REDIS_URL=redis://user:password@host:6379
+
+RABBIT_MQ_URI=amqp://user:password@host:5672
+RABBIT_MQ_CORE_QUEUE=core.queue
+RABBIT_MQ_AUTH_QUEUE=auth.queue
+PING_TIMEOUT_MS=1000
+
+CONSUMER_ACCESS_JWT_SECRET=change-me
+ADMIN_ACCESS_JWT_SECRET=change-me
+ACCESS_JWT_EXPIRATION=1d
+REFRESH_JWT_EXPIRATION=31d
 ```
 
-## Run tests
+---
+
+## Install & Database
 
 ```bash
-# unit tests
-$ npm run test
+npm install
 
-# e2e tests
-$ npm run test:e2e
+# Apply migrations
+npx prisma migrate deploy
 
-# test coverage
-$ npm run test:cov
+# Seed demo data (plans, payment methods, sample users)
+npx prisma db seed
 ```
 
-## Deployment
+---
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Run (Development)
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Start backing services (PostgreSQL, RabbitMQ, Redis) first.
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Auth microservice (RMQ)
+npx nest start auth --watch
+
+# Core microservice (RMQ)
+npx nest start core --watch
+
+# Gateway HTTP API
+npx nest start gateway --watch
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The gateway listens on `PORT` (default 8080). Swagger is available at `/docs`.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Run (Production)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run build
+
+node dist/apps/auth/main.js
+node dist/apps/core/main.js
+npm run start:prod   # gateway
+```
+
+Share the same `.env` (or environment variables) across all three processes. Place Redis close to the gateway for low-latency caching.
+
+---
+
+## Caching & Pagination
+
+* Redis cache is enabled in the gateway via `REDIS_URL`.
+* Cached for 60s per distinct query string.
+* Public catalog endpoints now support pagination and caching:
+  * `GET /membership/plans?page=1&limit=10`
+  * `GET /wallet/payment-methods?page=1&limit=10`
+* Responses include `pagination: { page, limit, total, pageCount }`.
+* Limits are capped at 50 per request to keep cache entries small.
+
+---
+
+## API Notes
+
+* **Consumer flows:** subscribe, change plan, request wallet top-ups, view own summary/top-ups.
+* **Admin flows:** manage plans, payment methods, and approve/reject top-ups.
+* **Localization:** `Accept-Language` header supports `en`, `km`, and `zh`; translations live under `i18n/`.
+* **Auth:** Consumer/Admin JWT secrets are independent; public catalog endpoints do not require auth.
+
+---
+
+## Useful Commands
+
+```bash
+npm run lint          # eslint
+npm run format        # prettier
+npm run test          # unit tests
+npx prisma studio     # browse DB data (after setting DATABASE_URL)
+```
+
+---
+
+## Deployment Checklist
+
+- [ ] Provide PostgreSQL, RabbitMQ, and Redis URLs.
+- [ ] Run `npm run build` on CI and ship `dist/` artifacts.
+- [ ] Share identical `.env` across gateway, auth, and core processes.
+- [ ] Expose only the gateway publicly; keep RMQ and DB inside the network.
+- [ ] Monitor Redis TTL hit rate on catalog endpoints for cache sizing tweaks.
+
+---
 
 ## Support
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+If something breaks, start by checking message broker connectivity and Prisma migrations. Swagger `/docs` is the quickest way to validate deployed endpoints.

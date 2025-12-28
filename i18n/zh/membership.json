@@ -1,0 +1,11 @@
+{
+  "plans_retrieved": "已获取可用会员计划",
+  "plan_not_found_or_inactive": "所选会员计划不可用或已停用",
+  "active_subscription_exists": "您已有一个有效的订阅",
+  "already_subscribed": "您已订阅该会员计划",
+  "subscribed_successfully": "订阅创建成功",
+  "active_subscription_not_found": "未找到有效订阅",
+  "subscription_canceled": "订阅已成功取消",
+  "plan_changed": "订阅计划已成功更新",
+  "subscription_retrieved": "已获取当前有效订阅"
+}

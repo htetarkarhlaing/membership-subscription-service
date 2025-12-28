@@ -1,0 +1,10 @@
+{
+  "payment_method_created": "支付方式已创建",
+  "payment_method_updated": "支付方式已更新",
+  "payment_methods_retrieved": "已获取支付方式列表",
+  "topups_retrieved": "已获取充值请求列表",
+  "topup_not_found": "未找到充值请求",
+  "topup_already_processed": "该充值请求已处理",
+  "topup_approved": "充值请求已批准，钱包余额已更新",
+  "topup_rejected": "充值请求已拒绝"
+}

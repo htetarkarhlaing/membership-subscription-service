@@ -153,24 +153,34 @@ export class AuthService {
 
     const hashedPassword = await PasswordUtil.hash(data.password);
 
-    const user = await this.prisma.user.create({
-      data: {
-        email: data.email,
-        password: hashedPassword,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        UserRole: 'CONSUMER',
-        UserStatus: 'ACTIVE',
-      },
-      select: {
-        id: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        UserRole: true,
-        UserStatus: true,
-        createdAt: true,
-      },
+    const { user } = await this.prisma.$transaction(async (tx) => {
+      const createdUser = await tx.user.create({
+        data: {
+          email: data.email,
+          password: hashedPassword,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          UserRole: 'CONSUMER',
+          UserStatus: 'ACTIVE',
+        },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          UserRole: true,
+          UserStatus: true,
+          createdAt: true,
+        },
+      });
+
+      await tx.wallet.create({
+        data: {
+          userId: createdUser.id,
+        },
+      });
+
+      return { user: createdUser };
     });
 
     const accessToken = await this.generateTokenForRole(user, 'CONSUMER');

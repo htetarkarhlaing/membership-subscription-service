@@ -34,5 +34,6 @@
   "something_went_wrong": "Something went wrong",
   "invalid_request": "Invalid Request",
   "invalid_time_request": "Invalid Time Request",
-  "permission_denied": "Permission Denied"
+  "permission_denied": "Permission Denied",
+  "rpc_timeout": "RPC request timed out"
 }
