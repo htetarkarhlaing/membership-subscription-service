@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: gateway
+    runtime: node
+    dockerfilePath: apps/gateway/Dockerfile
+    plan: free
+
+  - type: web
+    name: auth
+    runtime: node
+    dockerfilePath: apps/auth/Dockerfile
+    plan: free
+
+  - type: web
+    name: core
+    runtime: node
+    dockerfilePath: apps/core/Dockerfile
+    plan: free
