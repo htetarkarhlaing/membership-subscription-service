@@ -9,6 +9,7 @@ COPY libs ./libs
 COPY nest-cli.json tsconfig*.json ./
 
 RUN npm install
+RUN npx prisma generate
 RUN npm run build auth
 
 CMD ["node", "dist/apps/auth/main.js"]
