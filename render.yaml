@@ -9,6 +9,8 @@ services:
         value: production
       - key: SERVICE_NAME
         value: gateway
+      - key: PORT
+        value: 3000
 
       - key: DATABASE_URL
         sync: false
@@ -25,7 +27,7 @@ services:
       - key: ADMIN_ACCESS_JWT_SECRET
         sync: false
 
-  - type: worker
+  - type: web
     name: auth
     env: docker
     dockerfilePath: apps/auth/Dockerfile
@@ -35,6 +37,8 @@ services:
         value: production
       - key: SERVICE_NAME
         value: auth
+      - key: PORT
+        value: 3000
 
       - key: DATABASE_URL
         sync: false
@@ -49,7 +53,7 @@ services:
       - key: ADMIN_ACCESS_JWT_SECRET
         sync: false
 
-  - type: worker
+  - type: web
     name: core
     env: docker
     dockerfilePath: apps/core/Dockerfile
@@ -59,6 +63,8 @@ services:
         value: production
       - key: SERVICE_NAME
         value: core
+      - key: PORT
+        value: 3000
 
       - key: DATABASE_URL
         sync: false
