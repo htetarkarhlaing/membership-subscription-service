@@ -1,18 +1,18 @@
 services:
   - type: web
     name: gateway
-    runtime: node
+    env: docker
     dockerfilePath: apps/gateway/Dockerfile
     plan: free
 
   - type: web
     name: auth
-    runtime: node
+    env: docker
     dockerfilePath: apps/auth/Dockerfile
     plan: free
 
   - type: web
     name: core
-    runtime: node
+    env: docker
     dockerfilePath: apps/core/Dockerfile
     plan: free
