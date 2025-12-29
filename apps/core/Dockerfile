@@ -9,6 +9,7 @@ COPY libs ./libs
 COPY nest-cli.json tsconfig*.json ./
 
 RUN npm install
+RUN npx prisma generate
 RUN npm run build core
 
 CMD ["node", "dist/apps/core/main.js"]
