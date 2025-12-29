@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { CoreController } from './core.controller';
 import { CoreService } from './core.service';
 import { RmqModule } from '@app/common';
@@ -9,9 +10,10 @@ import { AdminMembershipController } from './admin-membership.controller';
 import { WalletService } from './wallet.service';
 import { ConsumerWalletController } from './consumer-wallet.controller';
 import { AdminWalletController } from './admin-wallet.controller';
+import { SubscriptionScheduler } from './subscription.scheduler';
 
 @Module({
-  imports: [RmqModule, PrismaModule],
+  imports: [RmqModule, PrismaModule, ScheduleModule.forRoot()],
   controllers: [
     CoreController,
     ConsumerMembershipController,
@@ -19,6 +21,11 @@ import { AdminWalletController } from './admin-wallet.controller';
     ConsumerWalletController,
     AdminWalletController,
   ],
-  providers: [CoreService, MembershipService, WalletService],
+  providers: [
+    CoreService,
+    MembershipService,
+    WalletService,
+    SubscriptionScheduler,
+  ],
 })
 export class CoreModule {}
