@@ -4,15 +4,67 @@ services:
     env: docker
     dockerfilePath: apps/gateway/Dockerfile
     plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVICE_NAME
+        value: gateway
 
-  - type: web
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: RABBIT_MQ_URI
+        sync: false
+      - key: RABBIT_MQ_CORE_QUEUE
+        value: core.queue
+      - key: RABBIT_MQ_AUTH_QUEUE
+        value: auth.queue
+      - key: CONSUMER_ACCESS_JWT_SECRET
+        sync: false
+      - key: ADMIN_ACCESS_JWT_SECRET
+        sync: false
+
+  - type: worker
     name: auth
     env: docker
     dockerfilePath: apps/auth/Dockerfile
     plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVICE_NAME
+        value: auth
 
-  - type: web
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: RABBIT_MQ_URI
+        sync: false
+      - key: RABBIT_MQ_AUTH_QUEUE
+        value: auth.queue
+      - key: CONSUMER_ACCESS_JWT_SECRET
+        sync: false
+      - key: ADMIN_ACCESS_JWT_SECRET
+        sync: false
+
+  - type: worker
     name: core
     env: docker
     dockerfilePath: apps/core/Dockerfile
     plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SERVICE_NAME
+        value: core
+
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: RABBIT_MQ_URI
+        sync: false
+      - key: RABBIT_MQ_CORE_QUEUE
+        value: core.queue
