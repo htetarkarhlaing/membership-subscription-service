@@ -6,6 +6,7 @@ COPY package*.json ./
 COPY prisma ./prisma
 COPY apps ./apps
 COPY libs ./libs
+COPY i18n ./i18n
 COPY nest-cli.json tsconfig*.json ./
 
 RUN npm install
