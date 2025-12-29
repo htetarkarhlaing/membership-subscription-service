@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AuthServiceController } from './auth-service.controller';
+import { ConsumerAuthServiceController } from './consumer.auth-service.controller';
 import { ClientsModule } from '@nestjs/microservices';
 import {
   RmqModule,
@@ -12,6 +12,13 @@ import { PrismaModule } from '@app/prisma';
 import { ConsumerLocalStrategy } from './strategies/consumer.local.strategy';
 import { ConsumerJwtStrategy } from './strategies/consumer.jwt.strategy';
 import { JwtService } from '@nestjs/jwt';
+import { AdminLocalStrategy } from './strategies/admin.local.strategy';
+import { AdminJwtStrategy } from './strategies/admin.jwt.strategy';
+import { AdminAuthServiceController } from './admin.auth-service.controller';
+import { ConsumerLocalAuthGuard } from './guards/consumer-local-auth.guard';
+import { ConsumerJwtAuthGuard } from './guards/consumer-jwt-auth.guard';
+import { AdminLocalAuthGuard } from './guards/admin-local-auth.guard';
+import { AdminJwtAuthGuard } from './guards/admin-jwt-auth.guard';
 
 @Module({
   imports: [
@@ -30,10 +37,16 @@ import { JwtService } from '@nestjs/jwt';
       },
     ]),
   ],
-  controllers: [AuthServiceController],
+  controllers: [ConsumerAuthServiceController, AdminAuthServiceController],
   providers: [
     ConsumerLocalStrategy,
     ConsumerJwtStrategy,
+    AdminLocalStrategy,
+    AdminJwtStrategy,
+    ConsumerLocalAuthGuard,
+    ConsumerJwtAuthGuard,
+    AdminLocalAuthGuard,
+    AdminJwtAuthGuard,
     ErrorHandlerService,
     RpcClientService,
     JwtService,

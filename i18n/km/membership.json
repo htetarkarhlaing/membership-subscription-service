@@ -1,0 +1,11 @@
+{
+  "plans_retrieved": "បានទាញយកបញ្ជីផែនការសមាជិកដែលកំពុងដំណើរការ",
+  "plan_not_found_or_inactive": "រកមិនឃើញផែនការនេះ ឬផែនការនេះមិនសកម្ម",
+  "active_subscription_exists": "អ្នកមានការជាវសកម្មរួចហើយ",
+  "already_subscribed": "អ្នកបានជាវផែនការនេះរួចហើយ",
+  "subscribed_successfully": "ការជាវបានជោគជ័យ",
+  "active_subscription_not_found": "មិនមានការជាវសកម្មទេ",
+  "subscription_canceled": "ការជាវត្រូវបានបោះបង់ដោយជោគជ័យ",
+  "plan_changed": "បានប្ដូរផែនការជាវដោយជោគជ័យ",
+  "subscription_retrieved": "បានទាញយកព័ត៌មានការជាវសកម្ម"
+}

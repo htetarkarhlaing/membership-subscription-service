@@ -4,7 +4,7 @@
 
 Table User {
   id String [pk]
-  email String [unique, not null]
+  email String [not null]
   password String [not null]
   firstName String [not null]
   lastName String [not null]
@@ -14,6 +14,18 @@ Table User {
   updatedAt DateTime [not null]
   subscriptions UserSubscription [not null]
   transactions Transaction [not null]
+  wallet Wallet
+  topUps WalletTopUp [not null]
+}
+
+Table PaymentMethod {
+  id String [pk]
+  name String [not null]
+  description String
+  Status Status [not null, default: 'ACTIVE']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  topUps WalletTopUp [not null]
 }
 
 Table SubscriptionPlan {
@@ -22,12 +34,22 @@ Table SubscriptionPlan {
   slug String [unique, not null]
   description String
   price Decimal [not null]
-  currency String [not null, default: 'USD']
   billingPeriod BillingPeriod [not null, default: 'MONTHLY']
   planDuration Int [not null, default: 1]
+  Status Status [not null, default: 'ACTIVE']
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
   subscriptions UserSubscription [not null]
+}
+
+Table Wallet {
+  id String [pk]
+  userId String [unique, not null]
+  balance Decimal [not null, default: 0]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  topUps WalletTopUp [not null]
 }
 
 Table UserSubscription {
@@ -49,14 +71,29 @@ Table UserSubscription {
   }
 }
 
+Table WalletTopUp {
+  id String [pk]
+  userId String [not null]
+  walletId String [not null]
+  paymentMethodId String [not null]
+  amount Decimal [not null]
+  status TopUpStatus [not null, default: 'PENDING']
+  transactionRef String
+  adminNote String
+  processedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  user User [not null]
+  wallet Wallet [not null]
+  paymentMethod PaymentMethod [not null]
+}
+
 Table Transaction {
   id String [pk]
   userId String [not null]
   subscriptionId String [not null]
   amount Decimal [not null]
-  currency String [not null, default: 'USD']
-  status PaymentStatus [not null, default: 'PENDING']
-  processedAt DateTime
+  PaymentStatus PaymentStatus [not null, default: 'SUCCESS']
   failureReason String
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
@@ -70,6 +107,12 @@ Enum UserStatus {
   SUSPENDED
 }
 
+Enum Status {
+  ACTIVE
+  INACTIVE
+  PERMANENTLY_DELETED
+}
+
 Enum UserRole {
   ADMIN
   CONSUMER
@@ -81,21 +124,34 @@ Enum BillingPeriod {
 }
 
 Enum SubscriptionStatus {
+  UPCOMING
   ACTIVE
   CANCELED
   EXPIRED
 }
 
 Enum PaymentStatus {
-  PENDING
-  COMPLETED
+  SUCCESS
   FAILED
-  REFUNDED
 }
+
+Enum TopUpStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+Ref: Wallet.userId - User.id [delete: Cascade]
 
 Ref: UserSubscription.userId > User.id [delete: Cascade]
 
 Ref: UserSubscription.planId > SubscriptionPlan.id
+
+Ref: WalletTopUp.userId > User.id [delete: Cascade]
+
+Ref: WalletTopUp.walletId > Wallet.id [delete: Cascade]
+
+Ref: WalletTopUp.paymentMethodId > PaymentMethod.id
 
 Ref: Transaction.userId > User.id [delete: Cascade]
 

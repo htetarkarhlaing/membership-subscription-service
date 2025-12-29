@@ -1,0 +1,16 @@
+{
+  "login_successful": "Admin login successful",
+  "register_successful": "Admin created successfully",
+  "invalid_email_or_password": "Invalid admin email or password",
+  "account_suspended": "Admin account has been suspended",
+  "account_inactive": "Admin account is not active",
+  "access_denied": "Admin access denied",
+  "user_not_found": "Admin user not found",
+  "authentication_failed": "Admin authentication failed",
+  "password_strength_invalid": "Admin password does not meet security requirements",
+  "current_password_incorrect": "Current admin password is incorrect",
+  "password_changed_successfully": "Admin password changed successfully",
+  "email_already_exists": "Admin with this email already exists",
+  "account_updated_successfully": "Admin account updated successfully",
+  "user_info_retrieved": "Admin information retrieved successfully"
+}

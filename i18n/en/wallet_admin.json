@@ -1,0 +1,10 @@
+{
+  "payment_method_created": "Payment method created",
+  "payment_method_updated": "Payment method updated",
+  "payment_methods_retrieved": "Payment methods retrieved",
+  "topups_retrieved": "Top-up requests retrieved",
+  "topup_not_found": "Top-up request not found",
+  "topup_already_processed": "Top-up request already processed",
+  "topup_approved": "Top-up approved and wallet credited",
+  "topup_rejected": "Top-up request rejected"
+}

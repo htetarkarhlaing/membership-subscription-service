@@ -6,6 +6,7 @@ import { AuthServiceModule } from './auth-service/auth-service.module';
 import { I18nJsonLoader, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { RedisCacheService } from './shared/redis-cache.service';
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
     AuthServiceModule,
   ],
   controllers: [GatewayController],
-  providers: [GatewayService],
+  providers: [GatewayService, RedisCacheService],
 })
 export class GatewayModule {}

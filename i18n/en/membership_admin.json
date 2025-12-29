@@ -1,0 +1,11 @@
+{
+  "plan_created": "Membership plan created",
+  "plan_updated": "Membership plan updated",
+  "plan_deleted": "Membership plan deleted",
+  "plans_retrieved": "Membership plans retrieved",
+  "plan_not_found": "Membership plan not found",
+  "plan_retrieved": "Membership plan retrieved",
+  "active_subscription_not_found": "No active subscription found for the user",
+  "subscription_canceled": "Subscription canceled by admin",
+  "report_generated": "Membership report generated"
+}

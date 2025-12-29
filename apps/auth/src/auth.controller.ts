@@ -16,6 +16,12 @@ import {
   AUTH_UPDATE_ACCOUNT_METHOD,
   AUTH_VALIDATE_CONSUMER_METHOD,
   AUTH_VALIDATE_TOKEN_METHOD,
+  AUTH_ADMIN_LOGIN_METHOD,
+  AUTH_ADMIN_GET_USER_INFO_METHOD,
+  AUTH_ADMIN_UPDATE_ACCOUNT_METHOD,
+  AUTH_ADMIN_CHANGE_PASSWORD_METHOD,
+  AUTH_VALIDATE_ADMIN_METHOD,
+  AUTH_VALIDATE_ADMIN_TOKEN_METHOD,
   RmqService,
 } from '@app/common';
 import {
@@ -180,6 +186,126 @@ export class AuthController {
   ) {
     try {
       const response = await this.authService.getUserInfo(data.userId, true);
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: any) {
+      this.rmqService.ack(context);
+      throw error;
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_VALIDATE_ADMIN_METHOD })
+  async handleValidateAdmin(
+    @Payload()
+    data: AUTHLoginDto,
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.validateAdmin(data);
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: any) {
+      this.rmqService.ack(context);
+      throw error;
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_ADMIN_LOGIN_METHOD })
+  async handleAdminLogin(
+    @Payload() user: Omit<User, 'password'>,
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.loginAdmin(user);
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: unknown) {
+      this.rmqService.ack(context);
+      throw error;
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_ADMIN_CHANGE_PASSWORD_METHOD })
+  async handleAdminChangePassword(
+    @Payload()
+    data: AUTHChangePasswordDto & { userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.changeAdminPassword(
+        data.userId,
+        data.oldPassword,
+        data.newPassword,
+      );
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: any) {
+      this.rmqService.ack(context);
+
+      const statusCode = error?.getStatus
+        ? error.getStatus()
+        : error?.status || 500;
+
+      const errorResponse =
+        typeof error?.response === 'object' ? error.response : {};
+      const errors = errorResponse.errors;
+
+      throw new RpcException({
+        statusCode,
+        message: error?.message || 'Password change failed',
+        ...(errors && { errors }),
+      });
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_ADMIN_GET_USER_INFO_METHOD })
+  async handleAdminGetUserInfo(
+    @Payload() data: { userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.getAdminUserInfo(
+        data.userId,
+        false,
+      );
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: any) {
+      this.rmqService.ack(context);
+      throw error;
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_ADMIN_UPDATE_ACCOUNT_METHOD })
+  async handleAdminUpdateAccount(
+    @Payload()
+    data: AUTHUpdateAccountDto & { userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.updateAdminAccount(data.userId, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      });
+      this.rmqService.ack(context);
+      return response;
+    } catch (error: any) {
+      this.rmqService.ack(context);
+      throw error;
+    }
+  }
+
+  @MessagePattern({ cmd: AUTH_VALIDATE_ADMIN_TOKEN_METHOD })
+  async handleValidateAdminToken(
+    @Payload() data: { userId: string },
+    @Ctx() context: RmqContext,
+  ) {
+    try {
+      const response = await this.authService.getAdminUserInfo(
+        data.userId,
+        true,
+      );
       this.rmqService.ack(context);
       return response;
     } catch (error: any) {
