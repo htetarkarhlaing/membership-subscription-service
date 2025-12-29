@@ -3,9 +3,12 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+COPY prisma ./prisma
+COPY apps ./apps
+COPY libs ./libs
+COPY nest-cli.json tsconfig*.json ./
 
-COPY . .
-RUN npm run build
+RUN npm install
+RUN npm run build auth
 
 CMD ["node", "dist/apps/auth/main.js"]
